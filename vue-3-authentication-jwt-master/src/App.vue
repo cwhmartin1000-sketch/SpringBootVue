@@ -4,52 +4,40 @@
       <div class="container app-shell">
         <router-link to="/home" class="navbar-brand brand-mark">
           <span class="brand-icon"><font-awesome-icon icon="shield-alt" /></span>
-          <span>SpringBootVue</span>
+          <span>午休聊天室</span>
         </router-link>
 
         <div class="navbar-nav mr-auto nav-links">
           <li class="nav-item">
             <router-link to="/home" class="nav-link">
-              <font-awesome-icon icon="home" /> Home
+              <font-awesome-icon icon="home" /> 首頁
             </router-link>
           </li>
-          <li v-if="showAdminBoard" class="nav-item">
-            <router-link to="/admin" class="nav-link">Admin Board</router-link>
-          </li>
-          <li v-if="showModeratorBoard" class="nav-item">
-            <router-link to="/mod" class="nav-link">Moderator Board</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link v-if="currentUser" to="/user" class="nav-link">User</router-link>
-          </li>
           <li v-if="currentUser" class="nav-item">
-            <router-link to="/employees" class="nav-link">Employees</router-link>
+            <router-link to="/user" class="nav-link">
+              <font-awesome-icon icon="comment" /> 留言版
+            </router-link>
           </li>
         </div>
 
         <div v-if="!currentUser" class="navbar-nav ml-auto auth-links">
           <li class="nav-item">
-            <router-link to="/register" class="nav-link btn btn-outline-light btn-sm action-btn">
-              <font-awesome-icon icon="user-plus" /> Sign Up
-            </router-link>
-          </li>
-          <li class="nav-item">
             <router-link to="/login" class="nav-link btn btn-outline-light btn-sm action-btn">
-              <font-awesome-icon icon="sign-in-alt" /> Login
+              <font-awesome-icon icon="sign-in-alt" /> 登入
             </router-link>
           </li>
         </div>
 
         <div v-if="currentUser" class="navbar-nav ml-auto auth-links user-menu">
           <li class="nav-item">
-            <router-link to="/profile" class="nav-link profile-pill">
+            <router-link to="/user" class="nav-link profile-pill">
               <span class="user-avatar"><font-awesome-icon icon="user" /></span>
               {{ currentUser.username }}
             </router-link>
           </li>
           <li class="nav-item">
             <a class="nav-link logout-link" @click.prevent="logOut">
-              <font-awesome-icon icon="sign-out-alt" /> LogOut
+              <font-awesome-icon icon="sign-out-alt" /> 登出
             </a>
           </li>
         </div>
@@ -69,21 +57,7 @@ export default {
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
-    },
-    showAdminBoard() {
-      if (this.currentUser && this.currentUser['roles']) {
-        return this.currentUser['roles'].includes('ROLE_ADMIN');
-      }
-
-      return false;
-    },
-    showModeratorBoard() {
-      if (this.currentUser && this.currentUser['roles']) {
-        return this.currentUser['roles'].includes('ROLE_MODERATOR');
-      }
-
-      return false;
-    },
+    }
   },
   methods: {
     logOut() {
@@ -101,7 +75,7 @@ export default {
 }
 
 .topbar {
-  background: rgba(17, 24, 39, 0.9);
+  background: rgba(15, 23, 42, 0.92);
   backdrop-filter: blur(12px);
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -133,8 +107,8 @@ export default {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #6d7cff, #8e5cf6);
-  box-shadow: 0 12px 25px rgba(109, 124, 255, 0.35);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  box-shadow: 0 12px 25px rgba(99, 102, 241, 0.35);
 }
 
 .nav-links,
@@ -148,7 +122,7 @@ export default {
 }
 
 .nav-link {
-  color: rgba(255, 255, 255, 0.8) !important;
+  color: rgba(255, 255, 255, 0.82) !important;
   font-size: 0.96rem;
   border-radius: 10px;
   padding: 0.7rem 0.9rem !important;
@@ -157,13 +131,13 @@ export default {
 
 .nav-link:hover,
 .nav-link.router-link-active {
-  background: rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.08);
   color: #fff !important;
 }
 
 .action-btn {
   border-radius: 999px;
-  padding: 0.6rem 1.15rem !important;
+  padding: 0.6rem 1.1rem !important;
   font-weight: 600;
 }
 

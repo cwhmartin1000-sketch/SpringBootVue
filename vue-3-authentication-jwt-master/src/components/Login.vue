@@ -5,26 +5,26 @@
         <div class="profile-img-card">
           <font-awesome-icon icon="user" />
         </div>
-        <h2>Welcome back</h2>
-        <p>Sign in to continue</p>
+        <h2>歡迎回來</h2>
+        <p>登入後即可進入同事留言版</p>
       </div>
 
       <Form @submit="handleLogin" :validation-schema="schema" class="auth-form">
         <div class="form-group">
-          <label for="username">Username</label>
-          <Field name="username" type="text" class="form-control" placeholder="Enter your username" />
+          <label for="username">帳號</label>
+          <Field name="username" type="text" class="form-control" placeholder="請輸入帳號" />
           <ErrorMessage name="username" class="error-feedback" />
         </div>
         <div class="form-group">
-          <label for="password">Password</label>
-          <Field name="password" type="password" class="form-control" placeholder="Enter your password" />
+          <label for="password">密碼</label>
+          <Field name="password" type="password" class="form-control" placeholder="請輸入密碼" />
           <ErrorMessage name="password" class="error-feedback" />
         </div>
 
         <div class="form-group action-group">
           <button class="btn btn-primary btn-block" :disabled="loading">
             <span v-show="loading" class="spinner-border spinner-border-sm"></span>
-            <span>Login</span>
+            <span>登入</span>
           </button>
         </div>
 
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { Form, Field, ErrorMessage } from "vee-validate";
+import { ErrorMessage, Field, Form } from "vee-validate";
 import * as yup from "yup";
 
 export default {
@@ -68,7 +68,7 @@ export default {
   },
   created() {
     if (this.loggedIn) {
-      this.$router.push("/profile");
+      this.$router.replace(this.$route.query.redirect || "/home");
     }
   },
   methods: {
@@ -77,7 +77,7 @@ export default {
 
       this.$store.dispatch("auth/login", user).then(
         () => {
-          this.$router.push("/profile");
+          this.$router.replace(this.$route.query.redirect || "/home");
         },
         (error) => {
           this.loading = false;

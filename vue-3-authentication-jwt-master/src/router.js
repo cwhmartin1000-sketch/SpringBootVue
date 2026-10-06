@@ -1,13 +1,8 @@
-import { createWebHistory, createRouter } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import Home from "./components/Home.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
-// lazy-loaded
-const Profile = () => import("./components/Profile.vue")
-const BoardAdmin = () => import("./components/BoardAdmin.vue")
-const BoardModerator = () => import("./components/BoardModerator.vue")
 const BoardUser = () => import("./components/BoardUser.vue")
-const Employee = () => import("./components/Employee.vue")
 
 const routes = [
   {
@@ -28,33 +23,10 @@ const routes = [
     component: Register,
   },
   {
-    path: "/profile",
-    name: "profile",
-    // lazy-loaded
-    component: Profile,
-  },
-  {
-    path: "/admin",
-    name: "admin",
-    // lazy-loaded
-    component: BoardAdmin,
-  },
-  {
-    path: "/mod",
-    name: "moderator",
-    // lazy-loaded
-    component: BoardModerator,
-  },
-  {
     path: "/user",
     name: "user",
-    // lazy-loaded
     component: BoardUser,
-  },
-  {
-    path: "/employees",
-    name: "employees",
-    component: Employee,
+    meta: { requiresAuth: true },
   },
 ];
 
@@ -63,18 +35,23 @@ const router = createRouter({
   routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//   const publicPages = ['/login', '/register', '/home'];
-//   const authRequired = !publicPages.includes(to.path);
-//   const loggedIn = localStorage.getItem('user');
+router.beforeEach((to) => {
+  const storedUser = localStorage.getItem("user");
+  let loggedIn = false;
 
-//   // trying to access a restricted page + not logged in
-//   // redirect to login page
-//   if (authRequired && !loggedIn) {
-//     next('/login');
-//   } else {
-//     next();
-//   }
-// });
+  if (storedUser) {
+    try {
+      loggedIn = Boolean(JSON.parse(storedUser).accessToken);
+    } catch (error) {
+      loggedIn = false;
+    }
+  }
+
+  if (to.matched.some((record) => record.meta.requiresAuth) && !loggedIn) {
+    return { path: "/login", query: { redirect: to.fullPath } };
+  }
+
+  return true;
+});
 
 export default router;

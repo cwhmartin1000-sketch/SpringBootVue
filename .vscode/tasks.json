@@ -1,0 +1,40 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "🚀 啟動 Spring Boot 後端",
+            "type": "shell",
+            "command": ".\\mvnw.cmd spring-boot:run",
+            "options": {
+                "cwd": "${workspaceFolder}/spring-boot-security-login-master",
+                "env": {
+                    "JAVA_HOME": "C:\\Tools\\jdk17\\jdk-17.0.20.1+1",
+                    "PATH": "C:\\Tools\\jdk17\\jdk-17.0.20.1+1\\bin;${env:PATH}"
+                }
+            },
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "⚡ 啟動 Vue 3 前端",
+            "type": "shell",
+            "command": "npm run dev",
+            "options": {
+                "cwd": "${workspaceFolder}/vue-3-authentication-jwt-master"
+            },
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "🔥 一鍵啟動前後端 (Fullstack)",
+            "dependsOn": [
+                "🚀 啟動 Spring Boot 後端",
+                "⚡ 啟動 Vue 3 前端"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

@@ -1,0 +1,2 @@
+# Node 依賴庫（絕對不能版控，檔案巨大）
+node_modules/

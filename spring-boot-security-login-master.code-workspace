@@ -1,0 +1,32 @@
+{
+  "folders": [
+    {
+      "name": "📄 Docs & SOP (筆記文件)",
+      "path": "docs"
+    },
+    {
+      "name": "⚡ Frontend (Vue 3)",
+      "path": "vue-3-authentication-jwt-master"
+    },
+    {
+      "name": "🌱 Backend (Spring Boot)",
+      "path": "spring-boot-security-login-master"
+    },
+    {
+      "name": "project-minimal",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    },
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "files.exclude": {
+      "**/.git": true,
+      "**/target": true,
+      "**/node_modules": true
+    }
+  }
+}

@@ -3,6 +3,7 @@ import Home from "./components/Home.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 const BoardUser = () => import("./components/BoardUser.vue")
+const LoungeRoom = () => import("./components/LoungeRoom.vue")
 
 const routes = [
   {
@@ -26,6 +27,12 @@ const routes = [
     path: "/user",
     name: "user",
     component: BoardUser,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/lounge",
+    name: "lounge",
+    component: LoungeRoom,
     meta: { requiresAuth: true },
   },
 ];

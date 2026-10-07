@@ -18,6 +18,11 @@
               <font-awesome-icon icon="comment" /> 留言版
             </router-link>
           </li>
+          <li v-if="currentUser" class="nav-item">
+            <router-link to="/lounge" class="nav-link">
+              <font-awesome-icon icon="smile" /> 午休小屋
+            </router-link>
+          </li>
         </div>
 
         <div v-if="!currentUser" class="navbar-nav ml-auto auth-links">

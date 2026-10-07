@@ -24,16 +24,16 @@ import com.bezkoder.spring.security.login.security.jwt.AuthTokenFilter;
 import com.bezkoder.spring.security.login.security.services.UserDetailsServiceImpl;
 
 @Configuration
-// @EnableWebSecurity
+//@EnableWebSecurity
 @EnableMethodSecurity
-// (securedEnabled = true,
-// jsr250Enabled = true,
-// prePostEnabled = true) // by default
+//(securedEnabled = true,
+//jsr250Enabled = true,
+//prePostEnabled = true) // by default
 public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
-
+  
   @Value("${spring.h2.console.path}")
   private String h2ConsolePath;
-
+  
   @Autowired
   UserDetailsServiceImpl userDetailsService;
 
@@ -45,28 +45,27 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     return new AuthTokenFilter();
   }
 
-  // @Override
-  // public void configure(AuthenticationManagerBuilder
-  // authenticationManagerBuilder) throws Exception {
-  // authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-  // }
-
+//  @Override
+//  public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+//    authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+//  }
+  
   @Bean
   public DaoAuthenticationProvider authenticationProvider() {
-    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
-    authProvider.setUserDetailsService(userDetailsService);
-    authProvider.setPasswordEncoder(passwordEncoder());
-
-    return authProvider;
+      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+       
+      authProvider.setUserDetailsService(userDetailsService);
+      authProvider.setPasswordEncoder(passwordEncoder());
+   
+      return authProvider;
   }
 
-  // @Bean
-  // @Override
-  // public AuthenticationManager authenticationManagerBean() throws Exception {
-  // return super.authenticationManagerBean();
-  // }
-
+//  @Bean
+//  @Override
+//  public AuthenticationManager authenticationManagerBean() throws Exception {
+//    return super.authenticationManagerBean();
+//  }
+  
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
     return authConfig.getAuthenticationManager();
@@ -77,46 +76,42 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
-  // @Override
-  // protected void configure(HttpSecurity http) throws Exception {
-  // http.cors().and().csrf().disable()
-  // .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-  // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-  // .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-  // .antMatchers("/api/test/**").permitAll()
-  // .antMatchers(h2ConsolePath + "/**").permitAll()
-  // .anyRequest().authenticated();
-  //
-  // // fix H2 database console: Refused to display ' in a frame because it set
-  // 'X-Frame-Options' to 'deny'
-  // http.headers().frameOptions().sameOrigin();
-  //
-  // http.addFilterBefore(authenticationJwtTokenFilter(),
-  // UsernamePasswordAuthenticationFilter.class);
-  // }
-
+//  @Override
+//  protected void configure(HttpSecurity http) throws Exception {
+//    http.cors().and().csrf().disable()
+//      .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+//      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+//      .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+//      .antMatchers("/api/test/**").permitAll()
+//      .antMatchers(h2ConsolePath + "/**").permitAll()
+//      .anyRequest().authenticated();
+//    
+//    // fix H2 database console: Refused to display ' in a frame because it set 'X-Frame-Options' to 'deny'
+//    http.headers().frameOptions().sameOrigin();
+//
+//    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+//  }
+  
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
-            // WebSocket 在第一個訊息中驗證 JWT，握手階段不含自訂認證標頭。
-            .requestMatchers("/ws/lounge").permitAll()
-            .requestMatchers("/api/test/all").permitAll()
-            .requestMatchers("/api/test/**", "/api/emp/**").authenticated()
-            .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-ui/**")).permitAll()
-            .anyRequest().authenticated())
-        .cors();
-
-    // fix H2 database console: Refused to display ' in a frame because it set
-    // 'X-Frame-Options' to 'deny'
+        .authorizeHttpRequests(auth -> 
+          auth.requestMatchers("/api/auth/**").permitAll()
+              .requestMatchers("/api/test/all").permitAll()
+              .requestMatchers("/api/test/**", "/api/emp/**").authenticated()
+              .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-ui/**")).permitAll()
+              .anyRequest().authenticated()
+        ).cors();
+    
+ // fix H2 database console: Refused to display ' in a frame because it set 'X-Frame-Options' to 'deny'
     http.headers(headers -> headers.frameOptions(frameOption -> frameOption.sameOrigin()));
-
+    
     http.authenticationProvider(authenticationProvider());
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
+    
     return http.build();
   }
 }
